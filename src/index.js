@@ -1,12 +1,20 @@
 import d3 from 'd3';
 import * as _ from 'lodash';
-import * as $ from 'jquery';
-const canvas = document.getElementById('d3Canvas');
+import $ from 'jquery';
+
+import './styles/base.scss';
 
 console.log('iei');
+const canvas = $('#d3Canvas');
 
-  // let width = Math.round((('.chart-container').css('width').split('px')[0]));
-  // let height = Math.round(width*0.65);
+console.log('canvas initiated: ',canvas);
+
+function resize(canvas) {
+  return canvas.height(canvas.width() * 0.65);
+}
+
+window.addEventListener('resize', (e) => resize(canvas));
+resize(canvas);
 
   // window.addEventListener('resize', function(e){
   //   width = Math.round($('.success-container').css('width').split('px')[0]);
