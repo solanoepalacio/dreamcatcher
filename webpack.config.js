@@ -8,17 +8,18 @@ const port = process.env.PORT || 7770;
 
 const entry = PRODUCTION
   ? [
-      './src/index.js'
+      './client/index.js'
     ]
   : [
-      './src/index.js',
+      './client/index.js',
       'webpack/hot/dev-server',
       'webpack-dev-server/client?http://localhost:7770'
     ]
 
 const plugins = PRODUCTION
   ? [
-      new webpack.optimizeUglifyJsPlugin()
+    // TODO => find out why this is not working anymore:
+      // new webpack.optimizeUglifyJsPlugin()
     ]
   : [
       new webpack.HotModuleReplacementPlugin()
@@ -62,8 +63,8 @@ module.exports = {
     }]
   },
   output: {
-    path: path.join(__dirname, 'dist/'),
-    publicPath: '/dist/',
+    path: path.join(__dirname, 'client/dist/'),
+    publicPath: '/client/dist/',
     filename: 'index_bundle.js'
   }
 }
