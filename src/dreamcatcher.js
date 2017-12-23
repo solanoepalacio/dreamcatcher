@@ -1,6 +1,9 @@
 'use strict'
 
 import Knot from './knot'
+import { createShape } from './shape'
+
+const svgns = 'http://www.w3.org/2000/svg'
 
 export default class DreamCatcher {
   /**
@@ -18,23 +21,32 @@ export default class DreamCatcher {
 
   setCanvas (containerId) {
     const container = document.querySelector('#' + containerId)
-    const canvas = document.createElement('canvas')
-    console.log('container', container)
-    console.log('canvas', canvas)
-    container.appendChild(canvas)
-    
-    this.canvas = canvas
-    this.ctx = canvas.getContext('2d')
-    
+
+    let svg = container.querySelector('svg')
+    if (!svg) {
+      svg = document.createElementNS(svgns, 'svg')
+      container.appendChild(svg)
+    }
+
+    const group = document.createElementNS(svgns, 'g')
+    container.appendChild(svg)
+    svg.appendChild(group)
+
+    this.svg = svg
+    this.group = group
+
     return this
   }
 
   setRadius (radius, padding = 20) {
-    this.radius = radius
     const ua = radius + padding
     this.center = [ua, ua]
-    this.canvas.setAttribute('height', ua * 2 + 'px')
-    this.canvas.setAttribute('width', ua * 2 + 'px')
+    
+    this.radius = radius
+    
+    this.svg.setAttribute('height', ua * 2)
+    this.svg.setAttribute('width', ua * 2)
+
     return this
   }
 
@@ -52,7 +64,6 @@ export default class DreamCatcher {
     this.drawSelf()
     Object.keys(this.knots).forEach((name) => {
       this.knots[name].drawLinks()
-      this.knots[name].setListener()
     })
     Object.keys(this.knots).forEach((name) => this.knots[name].drawSelf())
 
@@ -60,12 +71,20 @@ export default class DreamCatcher {
 
   drawSelf () {
     const [x, y] = this.center
-
-    this.ctx.beginPath()
-    this.ctx.arc(x, y, this.radius, 0, Math.PI * 2, false)
-    this.ctx.strokeStyle = '#EFD6AC'
-    this.ctx.lineWidth = 5
-    this.ctx.stroke()
+    const stroke = '#EFD6AC'
+    const strokeWidth = 3
+    createShape(
+      'circle',
+      this.group, 
+      {
+        cx: x,
+        cy: y,
+        stroke,
+        'stroke-width': strokeWidth,
+        r: this.radius,
+        fill: 'none'
+      }
+    )
   }
 }
 

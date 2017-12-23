@@ -1,5 +1,5 @@
 {
-  "name": "d3webpack",
+  "name": "dreamcatcher",
   "version": "0.1.0",
   "description": "plain d3 webpack boilerplate",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/solanoepalacio/d3webpack.git"
+    "url": "git+https://github.com/solanoepalacio/dreamcatcher.git"
   },
   "keywords": [
     "express",
@@ -27,13 +27,11 @@
     "babel-preset-es2015": "^6.24.1",
     "css-loader": "^0.28.4",
     "csv-loader": "^2.1.1",
-    "d3": "^4.9.1",
     "es2015": "0.0.0",
     "eslint": "^4.13.1",
     "eslint-plugin-babel": "^4.1.1",
     "express": "^4.15.3",
     "jquery": "^3.2.1",
-    "lodash": "^4.17.4",
     "mongoose": "^4.13.7",
     "morgan": "^1.9.0",
     "require-directory": "^2.1.1",
@@ -48,7 +46,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/solanoepalacio/d3webpack/issues"
+    "url": "https://github.com/solanoepalacio/dreamcatcher/issues"
   },
-  "homepage": "https://github.com/solanoepalacio/d3webpack#readme"
+  "homepage": "https://github.com/solanoepalacio/dreamcatcher#readme"
 }

@@ -1,4 +1,3 @@
-import d3 from 'd3';
 import './styles/base.scss';
 
 import './controller'
@@ -21,7 +20,7 @@ getModels().then((models) => {
 
   dreamCatcher
     .setCanvas('dreamCatcher')
-    .setRadius(260, 120)
+    .setRadius(210, 60)
     .setKnotsPosition()
     .draw()
 

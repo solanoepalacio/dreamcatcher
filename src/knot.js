@@ -1,5 +1,7 @@
 'use strict'
 
+import { createShape } from './shape'
+
 export default class Knot {
   constructor (node, index, dreamCatcher) {
     this.name = node.name
@@ -55,50 +57,73 @@ export default class Knot {
   // graphics
 
   drawSelf () {
-    const { ctx, radius } = this.parent
+    const { group, radius, center } = this.parent
     const { x, y } = this.absolute
+    const stroke = 'white'
+    const strokeWidth = 2
+    const fill = 
 
-    ctx.beginPath()
-    ctx.arc(x, y, this.size, 0, Math.PI * 2)
-    ctx.fillStyle = '#165B55'
-    ctx.fill()
-    ctx.strokeStyle = 'white'
-    ctx.lineWidth = 2
-    ctx.stroke()
+    this.element = createShape(
+      'circle',
+      group,
+      {
+        cx: x,
+        cy: y,
+        stroke,
+        r: this.size,
+        fill: '#165B55',
+        'stroke-width': strokeWidth,
+
+      }
+    )
     this.drawName()
   }
 
   drawName () {
-    const { ctx } = this.parent
+    const { group } = this.parent
     const { x, y } = this.absolute
-    ctx.font = '12px arial'
-    ctx.fillStyle = '#95B4B1'
-    ctx.textAlign = x >= this.parent.center[0] ? 'left' : 'right'
+
+    const textAlign = x >= this.parent.center[0] ? 'start' : 'end'
     const paddingX = x >= this.parent.center[0] ? 18 : -18
     const paddingY = y >= this.parent.center[1] ? 18 : -18
-    ctx.fillText(this.name, x + paddingX, y + paddingY)
+
+
+    const textElement = createShape(
+      'text',
+      group,
+      {
+        fill: 'white',
+        x: x + paddingX,
+        y: y + paddingY,
+        'font-size': '12',
+        'font-family': 'Verdana',
+        'text-anchor': textAlign
+      }
+    )
+    textElement.innerHTML = this.name
   }
 
   drawLinks () {
-    const { ctx } = this.parent
+    const { ctx, group } = this.parent
     const { x, y } = this.absolute
-    ctx.beginPath()
     for (const reference of this.references) {
-      ctx.moveTo(x, y)
-
       const refPosition = this.getReferencePosition(reference)
       if (refPosition) {
-        ctx.lineTo(refPosition.x, refPosition.y)
+        createShape(
+          'line',
+          group,
+          {
+            x1: x,
+            y1: y,
+            x2: refPosition.x,
+            y2: refPosition.y,
+            stroke: '#C4B08D',
+            'stroke-width': 1
+          }
+        )
       }
-      
     }
-    ctx.closePath()
-    ctx.strokeStyle = '#C4B08D'
-    ctx.lineWidth = 2
-    ctx.stroke()
   }
-
-  
 
   // utils: 
 
