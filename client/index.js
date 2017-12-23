@@ -20,7 +20,7 @@ getModels().then((models) => {
 
   dreamCatcher
     .setCanvas('dreamCatcher')
-    .setRadius(210, 60)
+    .setRadius(210, 120)
     .setKnotsPosition()
     .draw()
 

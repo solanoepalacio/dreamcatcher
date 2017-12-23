@@ -11,8 +11,11 @@ export default class Knot {
     // TODO => set the size accourding to the ammount of properties in knot
     this.size = 14
 
-    // this.setPolarPosition(index)
-    // this.setAbsolutePosition()
+    this.rendered = {
+      links: [],
+      name: null,
+      node: null
+    }
   }
   
   // position
@@ -49,7 +52,6 @@ export default class Knot {
     const referenceKnot = this.parent.knots[referencee]
     if (!referenceKnot) {
       return false
-      // throw new Error(`Reference knot ${referencee} was not fond in parent: ${this.parent}`)
     }
     return referenceKnot.getAbsolutePosition()
   }
@@ -61,9 +63,9 @@ export default class Knot {
     const { x, y } = this.absolute
     const stroke = 'white'
     const strokeWidth = 2
-    const fill = 
+    // const fill = 
 
-    this.element = createShape(
+    const element = createShape(
       'circle',
       group,
       {
@@ -76,6 +78,7 @@ export default class Knot {
 
       }
     )
+    this.rendered.node = element
     this.drawName()
   }
 
@@ -88,19 +91,20 @@ export default class Knot {
     const paddingY = y >= this.parent.center[1] ? 18 : -18
 
 
-    const textElement = createShape(
+    const element = createShape(
       'text',
       group,
       {
         fill: 'white',
         x: x + paddingX,
         y: y + paddingY,
-        'font-size': '12',
+        'font-size': '15',
         'font-family': 'Verdana',
         'text-anchor': textAlign
       }
     )
-    textElement.innerHTML = this.name
+    element.innerHTML = this.name
+    this.rendered.name = element
   }
 
   drawLinks () {
@@ -109,7 +113,7 @@ export default class Knot {
     for (const reference of this.references) {
       const refPosition = this.getReferencePosition(reference)
       if (refPosition) {
-        createShape(
+        const element = createShape(
           'line',
           group,
           {
@@ -118,11 +122,36 @@ export default class Knot {
             x2: refPosition.x,
             y2: refPosition.y,
             stroke: '#C4B08D',
-            'stroke-width': 1
+            'stroke-width': 2
           }
         )
+        this.rendered.links.push(element)
       }
     }
+  }
+
+  setEventListener () {
+    this.rendered.node.addEventListener('mouseenter', () => {
+      const { name, node, links } = this.rendered
+      links.forEach((link) => {
+        link.setAttributeNS(null, 'stroke', '#C44900')
+        link.setAttributeNS(null, 'stroke-width', 4)
+        link.setAttribute('class', 'node')
+      })
+
+      node.setAttributeNS(null, 'r', this.size * 1.2)
+      name.setAttributeNS(null, 'font-size', 18)
+    })
+
+    this.rendered.node.addEventListener('mouseleave', () => {
+      const { name, node, links } = this.rendered
+      links.forEach((link) => {
+        link.setAttributeNS(null, 'stroke', '#C4B08D')
+        link.setAttributeNS(null, 'stroke-width', 2)
+        name.setAttributeNS(null, 'font-size', 15)
+      })
+    })
+
   }
 
   // utils: 

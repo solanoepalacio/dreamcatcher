@@ -64,9 +64,12 @@ export default class DreamCatcher {
     this.drawSelf()
     Object.keys(this.knots).forEach((name) => {
       this.knots[name].drawLinks()
-    })
-    Object.keys(this.knots).forEach((name) => this.knots[name].drawSelf())
 
+    })
+    Object.keys(this.knots).forEach((name) => {
+      this.knots[name].drawSelf()
+      this.knots[name].setEventListener()
+    })
   }
 
   drawSelf () {

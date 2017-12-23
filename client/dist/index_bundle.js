@@ -104,7 +104,7 @@ getModels().then(function (models) {
   var dreamCatcher = new _dreamcatcher2.default(models);
   console.log('dreamCatcher', dreamCatcher);
 
-  dreamCatcher.setCanvas('dreamCatcher').setRadius(210, 60).setKnotsPosition().draw();
+  dreamCatcher.setCanvas('dreamCatcher').setRadius(210, 120).setKnotsPosition().draw();
 
   console.log('newDreamCatcher', dreamCatcher);
 });
@@ -150,7 +150,7 @@ exports = module.exports = __webpack_require__(5)(undefined);
 
 
 // module
-exports.push([module.i, "#dreamCatcher {\n  background-color: #04151f;\n  display: inline-block;\n}\n", ""]);
+exports.push([module.i, "#dreamCatcher {\n  background-color: #04151f;\n  display: inline-block;\n}\n.node {\n  background-color: #f00;\n}\n", ""]);
 
 // exports
 
@@ -805,7 +805,8 @@ var DreamCatcher = function () {
         _this3.knots[name].drawLinks();
       });
       Object.keys(this.knots).forEach(function (name) {
-        return _this3.knots[name].drawSelf();
+        _this3.knots[name].drawSelf();
+        _this3.knots[name].setEventListener();
       });
     }
   }, {
@@ -866,8 +867,11 @@ var Knot = function () {
     // TODO => set the size accourding to the ammount of properties in knot
     this.size = 14;
 
-    // this.setPolarPosition(index)
-    // this.setAbsolutePosition()
+    this.rendered = {
+      links: [],
+      name: null,
+      node: null
+    };
   }
 
   // position
@@ -913,7 +917,6 @@ var Knot = function () {
       var referenceKnot = this.parent.knots[referencee];
       if (!referenceKnot) {
         return false;
-        // throw new Error(`Reference knot ${referencee} was not fond in parent: ${this.parent}`)
       }
       return referenceKnot.getAbsolutePosition();
     }
@@ -933,7 +936,9 @@ var Knot = function () {
 
       var stroke = 'white';
       var strokeWidth = 2;
-      var fill = this.element = (0, _shape.createShape)('circle', group, {
+      // const fill = 
+
+      var element = (0, _shape.createShape)('circle', group, {
         cx: x,
         cy: y,
         stroke: stroke,
@@ -942,6 +947,7 @@ var Knot = function () {
         'stroke-width': strokeWidth
 
       });
+      this.rendered.node = element;
       this.drawName();
     }
   }, {
@@ -957,15 +963,16 @@ var Knot = function () {
       var paddingX = x >= this.parent.center[0] ? 18 : -18;
       var paddingY = y >= this.parent.center[1] ? 18 : -18;
 
-      var textElement = (0, _shape.createShape)('text', group, {
+      var element = (0, _shape.createShape)('text', group, {
         fill: 'white',
         x: x + paddingX,
         y: y + paddingY,
-        'font-size': '12',
+        'font-size': '15',
         'font-family': 'Verdana',
         'text-anchor': textAlign
       });
-      textElement.innerHTML = this.name;
+      element.innerHTML = this.name;
+      this.rendered.name = element;
     }
   }, {
     key: 'drawLinks',
@@ -986,14 +993,15 @@ var Knot = function () {
 
           var refPosition = this.getReferencePosition(reference);
           if (refPosition) {
-            (0, _shape.createShape)('line', group, {
+            var element = (0, _shape.createShape)('line', group, {
               x1: x,
               y1: y,
               x2: refPosition.x,
               y2: refPosition.y,
               stroke: '#C4B08D',
-              'stroke-width': 1
+              'stroke-width': 2
             });
+            this.rendered.links.push(element);
           }
         }
       } catch (err) {
@@ -1010,6 +1018,40 @@ var Knot = function () {
           }
         }
       }
+    }
+  }, {
+    key: 'setEventListener',
+    value: function setEventListener() {
+      var _this = this;
+
+      this.rendered.node.addEventListener('mouseenter', function () {
+        var _rendered = _this.rendered,
+            name = _rendered.name,
+            node = _rendered.node,
+            links = _rendered.links;
+
+        links.forEach(function (link) {
+          link.setAttributeNS(null, 'stroke', '#C44900');
+          link.setAttributeNS(null, 'stroke-width', 4);
+          link.setAttribute('class', 'node');
+        });
+
+        node.setAttributeNS(null, 'r', _this.size * 1.2);
+        name.setAttributeNS(null, 'font-size', 18);
+      });
+
+      this.rendered.node.addEventListener('mouseleave', function () {
+        var _rendered2 = _this.rendered,
+            name = _rendered2.name,
+            node = _rendered2.node,
+            links = _rendered2.links;
+
+        links.forEach(function (link) {
+          link.setAttributeNS(null, 'stroke', '#C4B08D');
+          link.setAttributeNS(null, 'stroke-width', 2);
+          name.setAttributeNS(null, 'font-size', 15);
+        });
+      });
     }
 
     // utils: 
