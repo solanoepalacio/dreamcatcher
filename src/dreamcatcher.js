@@ -43,7 +43,7 @@ export default class DreamCatcher {
     this.center = [ua, ua]
     
     this.radius = radius
-    
+    // ad ...AttributeNS
     this.svg.setAttribute('height', ua * 2)
     this.svg.setAttribute('width', ua * 2)
 

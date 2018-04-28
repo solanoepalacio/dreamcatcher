@@ -1,7 +1,7 @@
 {
   "name": "dreamcatcher",
   "version": "0.1.0",
-  "description": "plain d3 webpack boilerplate",
+  "description": "visualize your mongodb collections",
   "main": "index.js",
   "scripts": {
     "startClient": "NODE_ENV=development node devServer.js",
